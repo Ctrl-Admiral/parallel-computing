@@ -62,7 +62,13 @@ result_tuple benchmark_math_function(const FuncType& func, NumVectorType vec_num
     high_resolution_clock::time_point start_time = high_resolution_clock::now();
     std::uint64_t start_ticks = study::ticks();
 
-    func(vec_nums, num, iter);
+    for (std::size_t i = 0; i < iter; ++i)
+    {
+        NumVectorType result;
+        result.resize(vec_nums.size());
+        func(vec_nums, num, result);
+        study::do_not_optimize(result);
+    }
 
     high_resolution_clock::time_point end_time = high_resolution_clock::now();
     std::uint64_t end_ticks = study::ticks();
