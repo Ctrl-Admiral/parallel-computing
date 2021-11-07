@@ -61,6 +61,7 @@ void statistics_to_csv(const std::string& filename, const std::vector<result_tup
     std::ofstream f(filename);
     if (!f.is_open()) throw std::runtime_error("Cannot open output csv-file");
 
+    f << "Function name" << sep << "Iterations" << sep << "Ticks" << sep << "Time (ns)" << '\n';
     for (const auto& elem : statistics)
     {
         const auto& [ oper_name, iter, ticks, ns] = elem;
