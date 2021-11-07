@@ -57,15 +57,16 @@ result_tuple benchmark_math_function(const FuncType& func, NumType num, std::siz
 }
 
 template<typename NumVectorType, typename NumType, typename FuncType>
-result_tuple benchmark_math_function(const FuncType& func, NumVectorType vec_nums, NumType num, std::size_t iter, const std::string& func_name)
+result_tuple benchmark_math_function(const FuncType& func, const NumVectorType& vec_nums, NumType num, std::size_t iter, const std::string& func_name)
 {
+    NumVectorType result;
+    result.resize(vec_nums.size());
+
     high_resolution_clock::time_point start_time = high_resolution_clock::now();
     std::uint64_t start_ticks = study::ticks();
 
     for (std::size_t i = 0; i < iter; ++i)
     {
-        NumVectorType result;
-        result.resize(vec_nums.size());
         func(vec_nums, num, result);
         study::do_not_optimize(result);
     }
