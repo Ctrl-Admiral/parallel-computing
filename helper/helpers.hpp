@@ -56,6 +56,23 @@ result_tuple benchmark_math_function(const FuncType& func, NumType num, std::siz
     return std::make_tuple(func_name, iter, ticks, ns);
 }
 
+template<typename NumVectorType, typename NumType, typename FuncType>
+result_tuple benchmark_math_function(const FuncType& func, NumVectorType vec_nums, NumType num, std::size_t iter, const std::string& func_name)
+{
+    high_resolution_clock::time_point start_time = high_resolution_clock::now();
+    std::uint64_t start_ticks = study::ticks();
+
+    func(vec_nums, num, iter);
+
+    high_resolution_clock::time_point end_time = high_resolution_clock::now();
+    std::uint64_t end_ticks = study::ticks();
+
+    std::uint64_t ns = static_cast<std::uint64_t>(duration_cast<nanoseconds>(end_time - start_time).count());
+    std::uint64_t ticks = end_ticks - start_ticks;
+
+    return std::make_tuple(func_name, iter, ticks, ns);
+}
+
 void statistics_to_csv(const std::string& filename, const std::vector<result_tuple>& statistics, char sep=',')
 {
     std::ofstream f(filename);

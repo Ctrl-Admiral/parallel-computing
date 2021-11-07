@@ -1,6 +1,6 @@
 #include "helpers.hpp"
 #include <cmath>
-#include <immintrin.h>  // For AVX2
+#include <immintrin.h>  // For AVX
 
 
 __m256d double_to_m256d(double num_scalar)
