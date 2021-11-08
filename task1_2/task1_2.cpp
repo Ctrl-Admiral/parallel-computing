@@ -17,7 +17,7 @@ void differentiation_simd(const std::vector<double>& points, double dx, std::vec
 
 void differentiation_parallel(const std::vector<double>& points, double dx, std::vector<double>& result)
 {
-    #pragma omp parallel for
+    #pragma omp parallel for num_threads(3)
     for (std::size_t i = 0; i < points.size() - 1; ++i)
         result[i] = (points[i+1] - points[i]) / dx;
 }
@@ -35,9 +35,7 @@ std::tuple<std::vector<double>, double> generating_points(std::function<double(d
     double dx = (to - from) / num_points;
 
     for (double point = from; point <= to; point += dx)
-    {
         points.emplace_back(func(point));
-    }
 
     return {points, dx};
 }
@@ -45,9 +43,9 @@ std::tuple<std::vector<double>, double> generating_points(std::function<double(d
 int main()
 {
     std::vector<study::result_tuple> result_vector;
-    auto [points, dx] = generating_points(func, 100, 545345, 100000);
+    auto [points, dx] = generating_points(func, 100, 545, 100000);
 
-    for (std::uint64_t iter_pow = 5;  iter_pow < 6; ++iter_pow)
+    for (std::uint64_t iter_pow = 3;  iter_pow < 6; ++iter_pow)
     {
         std::uint64_t iter = std::pow(10, iter_pow);
         result_vector.emplace_back(study::benchmark_math_function(differentiation, points, dx, iter, "no pragma"));
